@@ -1,0 +1,5 @@
+static
+staticfiles
+base/__pycache__
+ListDo_Task/__pycache__
+base/migrations/__pycache__

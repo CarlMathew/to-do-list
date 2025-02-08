@@ -1,0 +1,340 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token }}" />
+
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script
+      src="https://kit.fontawesome.com/6579bcae86.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Outfit:wght@100..900&family=Sixtyfour+Convergence&family=Sofadi+One&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/tippy.js@6/themes/light.css"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    <style>
+      * {
+        font-family: "Lexend Deca", sans-serif;
+        font-optical-sizing: auto;
+      }
+      html {
+        background-color: #1e1e1e;
+      }
+    </style>
+  </head>
+  <body>
+    <dialog class="modal w-[20%] border-white border-2 rounded" id="editModal">
+      <div
+        class="flex flex-col p-4 bg-black text-white items-center justify-center"
+      >
+        <div class="">
+          <h1 class="font-bold text-xl px-4 bg-sky-600 rounded-lg text-center">
+            Edit Task
+          </h1>
+          <div class="mt-4">
+            <div class="flex flex-col gap-1">
+              <label for="name" class="text-xl">Name</label>
+              <input
+                id="name"
+                class="rounded-lg bg-transparent text-white focus:outline-none"
+                required
+              />
+            </div>
+            <div class="flex flex-col gap-1">
+              <label for="name" class="text-xl">Minutes</label>
+              <input
+                id="minutes"
+                class="rounded-lg bg-transparent text-white h-[10%] focus:outline-none"
+                required
+              />
+            </div>
+            <div class="flex justify-around mt-4">
+              <button
+                class="bg-green-400 px-2 rounded text-xl"
+                id="acceptUpdate"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  class="bi bi-check-lg"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"
+                  />
+                </svg>
+              </button>
+              <button class="bg-red-400 px-2 rounded text-xl" id="exitUpdate">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-x-lg"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+    <div class="h-screen flex flex-col md:flex-row text-white p-4 md:p-0">
+      <div
+        class="w-full md:w-[15%] md:h-screen rounded border-white flex justify-center items-center"
+      >
+        <div
+          class="flex flex-col shadow-xl shadow-black items-center w-5/6 h-[60%] border-2 rounded-[12px] border-white"
+        >
+          <div>
+            <img src="{% static './base/images/List-Do Task.png' %}" alt="" />
+          </div>
+          <ul class="flex flex-col gap-2">
+            <li
+              class="text-xl font-bold flex flex-row rounded-full transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:bg-white px-4 hover:text-black gap-1 hover:shadow-xl hover:shadow-black"
+            >
+              <i class="fa-solid fa-house self-center"></i
+              ><a href="" class="h-1/2">
+                <h1 class="mt-1">Home</h1>
+              </a>
+            </li>
+            <li
+              class="text-xl font-bold flex flex-row rounded-full transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:bg-white px-4 hover:text-black gap-1 hover:shadow-xl hover:shadow-black"
+            >
+              <i class="fa-solid fa-chart-line self-center mt-1"></i
+              ><a href="" class="h-1/2">
+                <h1 class="mt-1">Statistic</h1>
+              </a>
+            </li>
+          </ul>
+          <div class="flex items-end h-screen">
+            <div
+              class="-translate-y-10 text-xl font-bold flex flex-row rounded-full transition-all duration-300 hover:scale-110 hover:-translate-y-11 hover:bg-white px-4 hover:text-black gap-1 hover:shadow-xl hover:shadow-black"
+            >
+              <i class="fa-solid fa-gear self-center"></i
+              ><a href="" class="h-1/2">
+                <h1 class="mt-1">Settings</h1>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="w-full md:w-[60%] rounded border-white border-2 h-auto md:h-[95%] self-center shadow-black shadow-xl p-8"
+      >
+        <div class="flex">
+          <div class="w-1/2">
+            <div class="">
+              <h1 class="text-3xl font-bold">
+                Welcome {{ user.username|title }}
+              </h1>
+              <p class="italic text-[12pt] font-bold mt-1">
+                Time To Do Your Task!
+              </p>
+            </div>
+          </div>
+          <div class="w-1/2 flex justify-end items-center gap-4 relative">
+            <div>
+              <img
+                src="{{ user.profile_pic.url }}"
+                alt="Profile"
+                width="40"
+                height="40"
+                class="rounded-full"
+              />
+            </div>
+            <div class="">
+              <button id="popover_1">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <div
+                id="popover_option"
+                class="border-2 shadow-black shadow-xl border-sky-400 absolute right-1 md:right-auto flex justify-center text-md w-full md:w-[30%] bg-white text-black py-2 rounded translate-y-1 md:translate-y-0 md:top-auto"
+              >
+                <ul class="flex flex-col gap-1">
+                  <li
+                    class="px-2 transition-all duration-300 hover:bg-black hover:text-white rounded-xl cursor-pointer"
+                  >
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload
+                    Picture
+                  </li>
+                  <li
+                    class="px-2 transition-all duration-300 hover:bg-black hover:text-white rounded-xl cursor-pointer"
+                  >
+                    <a href="logout">
+                      <i class="fa-solid fa-arrow-right-from-bracket"></i> Log
+                      Out</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="h-auto md:h-[90%] mt-2 rounded-[12px] flex flex-col md:flex-row gap-2 justify-between"
+        >
+          <div class="w-full md:w-4/6 rounded-[12px]">
+            <div class="h-[90%] w-full px-4">
+              <h1
+                class="text-xl font-bold justify-center h-[10%] flex items-center"
+              >
+                <span class="mt-2 px-4 rounded-full" id="selectedCategoryName"
+                  >{{ first_category }}</span
+                >
+              </h1>
+              <div
+                class="h-auto md:h-[90%] p-0 md:p-5 border-0 md:border-2 md:border-white rounded-[12px] shadow shadow-black shadow-xl flex flex-col gap-4 md:gap-2 overflow-x-auto"
+                id="listTask"
+              >
+                {% if tasks|length == 0 %}
+                <div
+                  class="text-center h-full flex items-center justify-center"
+                  id="warningMessage"
+                >
+                  No Data Found
+                </div>
+                {% elif tasks %} {% for task in tasks %}
+
+                <div
+                  id="{{task.id}}"
+                  class="task bg-black w-full border-2 border-white p-4 rounded-[12px] shadow-xl shadow-black flex"
+                >
+                  <div class="w-[70%] p-2 flex gap-2">
+                    <button
+                      data-id="{{ task.id }}"
+                      class="px-4 bg-sky-300 font-bold text-white rounded shadow shadow-slate-400 h-[50px] max-h-[50%] self-center editBtn"
+                    >
+                      Edit
+                    </button>
+
+                    <h1 class="text-xl font-bold self-center">
+                      {{task.task_name}} - {{task.time}} minutes
+                    </h1>
+                  </div>
+                  <div class="w-[30%] flex justify-end gap-2">
+                    <button>
+                      <i
+                        class="fa-solid fa-check px-4 py-2 rounded bg-green-400 shadow shadow-slate-400"
+                      ></i>
+                    </button>
+                    <button data-idKey="{{task.id}}">
+                      <i
+                        data-idKey="{{task.id}}"
+                        class="fa-solid fa-x px-4 py-2 rounded bg-red-400 shadow shadow-slate-400 removeTask"
+                      ></i>
+                    </button>
+                  </div>
+                </div>
+                {% endfor %} {% endif %}
+              </div>
+            </div>
+            <div
+              class="h-[10%] flex justify-center w-full relative mt-4 mb-2 md:mb-0 md:mt-0"
+            >
+              <button
+                class="border-2 border-white rounded-full px-4 h-[50%] self-center hover:bg-white hover:text-black hover:-translate-y-1 hover:scale-110 transition-all duration-300"
+                id="addTask"
+              >
+                <i class="fa-solid fa-plus"></i> Add Task
+              </button>
+            </div>
+          </div>
+          <div class="w-full md:w-2/6 flex justify-center flex-col gap-2">
+            <div
+              class="border-2 border-white h-1/2 rounded-[12px] p-4 flex flex-col"
+            >
+              <div class="h-[80%] overflow-y-auto overflow-x-hidden">
+                <h1 class="text-[17pt] font-bold w-full text-center">
+                  <i class="fa-solid fa-table-list"></i> Category
+                </h1>
+                <ul class="mt-2 flex flex-col gap-1" id="listCategory">
+                  {% for category in categories %}
+                  <li
+                    data-category-pk="{{category.pk}}"
+                    id="{{category.id}}"
+                    class="active:scale-90 select_category text-[15pt] w-full text-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:bg-white hover:text-black hover:rounded-full hover:shadow-xl hover:shadow-black cursor-pointer"
+                  >
+                    {{category.category_name}}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div class="h-[20%] flex justify-center items-end">
+                <button
+                  id="addCategory"
+                  class="px-4 h-[65%] border-white border-2 rounded-full hover:bg-white hover:text-black hover:-translate-y-1 hover:scale-110 transition-all duration-300"
+                >
+                  <i class="fa-solid fa-plus"></i> Add Category
+                </button>
+              </div>
+            </div>
+
+            <div class="border-2 border-white h-1/2 rounded-[12px] p-4">
+              <div class="h-1/3 flex justify-center items-center flex-col">
+                <h1 class="text-xl text-center">Task Completed</h1>
+                <p class="text-xl font-bold text-center" id="completedTask">
+                  0
+                </p>
+              </div>
+              <div class="h-1/3 flex justify-center items-center flex-col">
+                <h1 class="text-xl text-center">Task Removed</h1>
+                <p class="text-xl font-bold text-center" id="completedTask">
+                  0
+                </p>
+              </div>
+              <div class="h-1/3 flex justify-center items-center flex-col">
+                <h1 class="text-xl text-center">Task Today</h1>
+                <p class="text-xl font-bold text-center" id="completedTask">
+                  {{total_task}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="w-full md:w-[25%] rounded border-white border-2 h-[95%] self-center shadow-black shadow-xl p-8 mx-4 shadow shadow-black shadow-xl"
+      >
+        Hello3
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script>
+      const token = "{{ access_token|escapejs }}";
+      const user_details = JSON.parse("{{ user_details|escapejs }}");
+      const user_pk = "{{ request.user.pk }}";
+      let categoryType = " {{ first_pk }} ";
+      let firstTask = " {{ first_name }} ";
+      let taskCount = Number("{{ taskCount|escapejs }}");
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <script src="{% static 'base/js/home.js' %}"></script>
+  </body>
+</html>
