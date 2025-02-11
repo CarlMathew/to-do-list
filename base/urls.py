@@ -15,6 +15,8 @@ urlpatterns = [
     path("api/createCategory/", views.create_category),
     path("api/createTask/", views.create_task),
     path("api/deleteTask/", views.deleteTask),
-    path("api/updateTask/<str:id>", view=views.update_task)
+    path("api/updateTask/<str:id>", view=views.update_task),
+    path("api/addFriend/",  view=views.add_friend),
+    path("api/unfriend/", view = views.removeFriend)
 
 ]

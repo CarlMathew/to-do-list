@@ -6,8 +6,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .serializers import CategorySerializer, TaskSerializer
-from .models import Profile, Cateogry, Task
+from .models import Profile, Cateogry, Task, FriendRequest
 from rest_framework.response import Response
+from django.db.models import Q
 import json
 # Create your views here.
 
@@ -49,6 +50,26 @@ def create_task(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED) 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def add_friend(request):
+    user_id = request.query_params.get("user_id")
+
+    if not user_id:
+        raise ValueError({"Please provide the user id"})
+    
+    try:
+        user_following = User.objects.get(id = int(user_id))
+        profile = Profile.objects.get(user=user_following)
+        new_add_friend = FriendRequest.objects.create(user_follower = request.user, 
+                                                      user_following = user_following, 
+                                                      profile = profile)
+        new_add_friend.save()
+        return Response({"message": "Added"}, status = status.HTTP_200_OK)
+
+    except:
+        return Response({"error": "Internal Server Error"}, status = status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
@@ -83,19 +104,36 @@ def deleteTask(request):
     task.delete()
     return Response({"message": "Task deleted completely"}, status=status.HTTP_202_ACCEPTED)
 
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def removeFriend(request):
+    user_id = int(request.query_params.get("user_id"))
+    if not user_id:
+        return Response({"message": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+    try:  
+        remove_friend = FriendRequest.objects.filter(Q(user_follower = request.user) & Q(user_following = user_id))
+        if remove_friend.exists():
+            remove_friend.delete()
+            return Response({"message": "Successful"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Friend Request Not Found"}, status = status.HTTP_404_NOT_FOUND)
+    except:
+        return Response({"message": "Internal Error Server"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 
 @login_required(login_url="/listdo/login")
 def home(request):
     profile = Profile.objects.get(user = request.user)
     access_token = request.session.get("access_token")
-
     username = request.session.get("username")
     password = request.session.get("password")
-
-
     categories = Cateogry.objects.filter(user = request.user)
-
+    users = Profile.objects.select_related("user").all()
+    friend_request = FriendRequest.objects.filter(user_follower = request.user).values()
+    added = [i["user_following_id"] for i in friend_request]
+  
     first_category = None
     first_pk = None
     first_task = None
@@ -111,7 +149,6 @@ def home(request):
         work_task = Task.objects.filter(category__id = first_pk)
         taskCount = len(tasks)
         work_task_count = len(work_task)
-    
 
     return render(request, "base/home.html", {
         "user": profile,
@@ -126,7 +163,9 @@ def home(request):
         }),
         "tasks": tasks,
         "total_task": work_task_count,
-        "taskCount": taskCount
+        "taskCount": taskCount,
+        "suggested_friends": users,
+        "added": added
     })
 
 

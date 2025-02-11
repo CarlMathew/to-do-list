@@ -11,6 +11,8 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     username = models.CharField(max_length=255)
     profile_pic = models.ImageField(upload_to="profile/", default="profile/default-img.jpg")
+    is_online = models.BooleanField(default = 0)
+
 
     def __str__(self):
         return f"Username: {self.username}"
@@ -34,3 +36,12 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.category}: {self.task_name}"
+    
+class FriendRequest(models.Model):
+    user_follower = models.ForeignKey(User, on_delete = models.CASCADE, null = True, related_name="following_request")
+    user_following = models.ForeignKey(User, on_delete= models.CASCADE, null = True, related_name="follower_request")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null = True)
+    added_at = models.DateTimeField(default = timezone.now)
+
+    def __str__(self):
+        return f"{self.user_follower} following {self.user_following}"
