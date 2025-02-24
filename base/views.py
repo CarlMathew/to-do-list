@@ -133,7 +133,8 @@ def home(request):
     users = Profile.objects.select_related("user").all()
     friend_request = FriendRequest.objects.filter(user_follower = request.user).values()
     added = [i["user_following_id"] for i in friend_request]
-  
+    user_friend_request = FriendRequest.objects.filter(user_following = request.user).select_related("user_following", "profile")
+    print(user_friend_request)
     first_category = None
     first_pk = None
     first_task = None
@@ -165,7 +166,8 @@ def home(request):
         "total_task": work_task_count,
         "taskCount": taskCount,
         "suggested_friends": users,
-        "added": added
+        "added": added,
+        "friend_request": user_friend_request
     })
 
 

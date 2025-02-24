@@ -45,3 +45,8 @@ class FriendRequest(models.Model):
 
     def __str__(self):
         return f"{self.user_follower} following {self.user_following}"
+    
+class Friend(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null = True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null = True)
+    added_at = models.DateTimeField(default=timezone.now)
